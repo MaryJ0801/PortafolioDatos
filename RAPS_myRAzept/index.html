@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAPS · myRAzept · Executive Intelligence Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --navy:#0D1B2A;--navy-mid:#1A2E45;--teal:#00C9B1;--cyan:#38BDF8;
+  --green:#22D3A5;--amber:#F59E0B;--red:#EF4444;
+  --white:#F0F4F8;--white-dim:#B8C7D9;--muted:#6B8EAE;
+  --card-bg:rgba(26,46,69,0.72);--card-border:rgba(0,201,177,0.14);
+  --nathan:#EF4444;--olivia:#F59E0B;--ida:#22D3A5;--daniel:#38BDF8;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.5;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse 80% 55% at 8% 18%,rgba(0,201,177,.07) 0%,transparent 55%),
+  radial-gradient(ellipse 55% 75% at 92% 82%,rgba(56,189,248,.05) 0%,transparent 55%),
+  linear-gradient(158deg,#0D1B2A 0%,#101C2E 45%,#0A1520 100%);z-index:-1}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:100;background:rgba(13,27,42,.94);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--card-border);padding:0 28px;display:flex;align-items:center;
+  justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:14px}
+.logo-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--teal),var(--cyan));border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#0D1B2A}
+.logo-text{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:.02em}
+.logo-text span{color:var(--teal)}
+.header-meta{display:flex;align-items:center;gap:20px}
+.header-badge{padding:3px 11px;border-radius:20px;background:rgba(0,201,177,.11);border:1px solid rgba(0,201,177,.28);
+  font-size:11px;color:var(--teal);font-weight:500;letter-spacing:.07em;text-transform:uppercase}
+.header-date{font-size:11px;color:var(--muted)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);
+  display:inline-block;margin-right:5px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* TABS */
+.nav-tabs{display:flex;gap:2px;padding:11px 28px 0;border-bottom:1px solid rgba(255,255,255,.06);overflow-x:auto;scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 18px;border-radius:8px 8px 0 0;border:1px solid transparent;border-bottom:none;background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--white-dim);background:rgba(255,255,255,.04)}
+.tab.active{background:var(--card-bg);border-color:var(--card-border);color:var(--teal);backdrop-filter:blur(10px)}
+.tab-num{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:4px;
+  background:rgba(0,201,177,.14);font-size:10px;font-weight:600;color:var(--teal);margin-right:6px}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:10px;padding:8px 28px;background:rgba(26,46,69,.45);
+  border-bottom:1px solid rgba(255,255,255,.05);overflow-x:auto;scrollbar-width:none;flex-wrap:wrap}
+.filter-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.persona-btn{padding:3px 13px;border-radius:18px;border:1px solid rgba(255,255,255,.14);background:transparent;
+  color:var(--white-dim);font-size:11px;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
+.persona-btn:hover{border-color:rgba(0,201,177,.4);color:var(--teal)}
+.persona-btn.active-all{background:rgba(0,201,177,.14);border-color:var(--teal);color:var(--teal)}
+.persona-btn[data-p="Nathan"].active-p{background:rgba(239,68,68,.14);border-color:var(--nathan);color:var(--nathan)}
+.persona-btn[data-p="Olivia"].active-p{background:rgba(245,158,11,.14);border-color:var(--olivia);color:var(--olivia)}
+.persona-btn[data-p="Ida"].active-p{background:rgba(34,211,165,.14);border-color:var(--ida);color:var(--ida)}
+.persona-btn[data-p="Daniel"].active-p{background:rgba(56,189,248,.14);border-color:var(--daniel);color:var(--daniel)}
+.sep{width:1px;height:18px;background:rgba(255,255,255,.1)}
+
+/* LAYOUT */
+.content{padding:22px 28px 60px;max-width:1600px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:16px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:16px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-bottom:16px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:13px;margin-bottom:16px}
+.span2{grid-column:span 2}
+@media(max-width:1100px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}.grid-2-1{grid-template-columns:1fr}.content{padding:16px 14px 60px}}
+@media(max-width:700px){.grid-4,.grid-3,.grid-2{grid-template-columns:1fr}header{padding:0 14px}.nav-tabs,.filter-bar{padding-left:14px;padding-right:14px}.content{padding:11px 11px 60px}}
+
+/* CARD */
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:11px;padding:16px;
+  backdrop-filter:blur(12px);transition:border-color .2s;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(0,201,177,.25),transparent)}
+.card:hover{border-color:rgba(0,201,177,.28)}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.section-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;display:flex;align-items:center;gap:9px}
+.section-title .accent{color:var(--teal)}
+.section-subtitle{font-size:12px;color:var(--muted);margin-top:2px}
+.section-tag{font-size:10px;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:11px;
+  background:rgba(0,201,177,.09);color:var(--teal);border:1px solid rgba(0,201,177,.2)}
+
+/* KPI CARDS */
+.kpi-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:11px;padding:15px 17px;
+  backdrop-filter:blur(12px);position:relative;overflow:hidden;cursor:default;transition:all .18s}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi-card.green::before{background:linear-gradient(90deg,var(--green),var(--teal))}
+.kpi-card.amber::before{background:linear-gradient(90deg,var(--amber),#c87f00)}
+.kpi-card.red::before{background:linear-gradient(90deg,var(--red),#c43030)}
+.kpi-card.blue::before{background:linear-gradient(90deg,var(--cyan),#4c7ef5)}
+.kpi-card:hover{transform:translateY(-2px);border-color:rgba(0,201,177,.32)}
+.kpi-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.kpi-value{font-family:'Syne',sans-serif;font-size:27px;font-weight:800;line-height:1}
+.kpi-value.green{color:var(--green)}.kpi-value.amber{color:var(--amber)}.kpi-value.red{color:var(--red)}.kpi-value.blue{color:var(--cyan)}
+.kpi-unit{font-size:12px;font-weight:400;color:var(--muted);margin-left:3px}
+.kpi-trend{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:11px}
+.up{color:var(--green)}.dn{color:var(--red)}.flat{color:var(--muted)}
+.kpi-formula{font-size:10px;color:var(--muted);margin-top:3px;font-style:italic}
+.kpi-rec{font-size:10px;color:rgba(0,201,177,.75);margin-top:5px;line-height:1.3}
+.sem{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
+.s-g{background:var(--green);box-shadow:0 0 5px var(--green)}.s-a{background:var(--amber);box-shadow:0 0 5px var(--amber)}.s-r{background:var(--red);box-shadow:0 0 5px var(--red)}
+
+/* INSIGHTS */
+.ic{border-radius:9px;padding:10px 14px;border-left:3px solid;margin-bottom:9px}
+.ic.info{background:rgba(56,189,248,.07);border-color:var(--cyan)}
+.ic.warn{background:rgba(245,158,11,.07);border-color:var(--amber)}
+.ic.alert{background:rgba(239,68,68,.07);border-color:var(--red)}
+.ic.ok{background:rgba(34,211,165,.07);border-color:var(--green)}
+.ic-text{font-size:11.5px;line-height:1.4}.ic-text strong{color:var(--white);font-weight:500}
+
+/* CHARTS */
+.cw{position:relative;width:100%;height:220px}
+.cw.tall{height:278px}.cw.short{height:155px}
+canvas{max-width:100%}
+.ct{font-family:'Syne',sans-serif;font-weight:600;font-size:12.5px;margin-bottom:13px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ct .badge{font-size:10px;padding:2px 7px;border-radius:9px;font-family:'DM Sans',sans-serif;
+  background:rgba(0,201,177,.11);color:var(--teal);flex-shrink:0}
+
+/* PERSONA BADGES */
+.pb{padding:2px 9px;border-radius:9px;font-size:10px;font-weight:500}
+.pb-n{background:rgba(239,68,68,.14);color:var(--nathan);border:1px solid rgba(239,68,68,.3)}
+.pb-o{background:rgba(245,158,11,.14);color:var(--olivia);border:1px solid rgba(245,158,11,.3)}
+.pb-i{background:rgba(34,211,165,.14);color:var(--ida);border:1px solid rgba(34,211,165,.3)}
+.pb-d{background:rgba(56,189,248,.14);color:var(--daniel);border:1px solid rgba(56,189,248,.3)}
+
+/* PROGRESS */
+.pr{margin-bottom:11px}
+.pr-lbl{display:flex;justify-content:space-between;margin-bottom:3px;font-size:11px}
+.pr-trk{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.pr-fill{height:100%;border-radius:3px;transition:width 1s ease}
+
+/* FUNNEL */
+.fs{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.fbw{flex:1;height:30px;background:rgba(255,255,255,.04);border-radius:5px;overflow:hidden}
+.fb{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:500;transition:width .8s ease}
+.flbl{font-size:11px;color:var(--muted);width:130px;text-align:right;flex-shrink:0}
+
+/* COLLAB BAR ROWS */
+.cbr{display:flex;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.cbr-dept{font-size:11px;font-weight:500;width:110px;flex-shrink:0}
+.cbr-bw{flex:1;height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin:0 12px}
+.cbr-b{height:100%;border-radius:4px}
+.cbr-val{font-size:11px;width:38px;text-align:right;flex-shrink:0}
+
+/* TIMELINE */
+.tli{display:flex;gap:13px;margin-bottom:14px;position:relative}
+.tli::before{content:'';position:absolute;left:4px;top:13px;bottom:-14px;width:1px;background:rgba(255,255,255,.09)}
+.tli:last-child::before{display:none}
+.tl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px;position:relative;z-index:1}
+.tl-d{font-size:10px;color:var(--muted)}.tl-t{font-size:12px;font-weight:500;margin:1px 0}.tl-desc{font-size:11px;color:var(--muted)}
+
+/* TABLE */
+.et{width:100%;border-collapse:collapse}
+.et th{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);padding:7px 11px;border-bottom:1px solid rgba(255,255,255,.07);text-align:left}
+.et td{padding:8px 11px;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}
+.et tr:hover td{background:rgba(255,255,255,.03)}
+.pill{padding:2px 9px;border-radius:9px;font-size:10px;font-weight:600;text-align:center;display:inline-block}
+.ph{background:rgba(239,68,68,.18);color:#FF8080}.pm{background:rgba(245,158,11,.18);color:#FFB830}
+.pl{background:rgba(34,211,165,.18);color:var(--green)}.pc{background:rgba(239,68,68,.28);color:var(--red);border:1px solid rgba(239,68,68,.4)}
+
+/* RISK ROW */
+.rr{display:grid;grid-template-columns:185px 72px 72px 80px 1fr 115px;gap:7px;align-items:center;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:11px}
+.rr.hd{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+
+.data-note{text-align:center;font-size:10px;color:rgba(107,142,174,.5);padding:18px 0 0;letter-spacing:.04em}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,201,177,.18);border-radius:3px}
+.section.active .card,.section.active .kpi-card{animation:fu .3s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">R</div>
+    <div><div class="logo-text">RAPS <span>myRAzept</span> · Executive Intelligence</div></div>
+  </div>
+  <div class="header-meta">
+    <div class="header-badge">Innovación Centrada en el Cliente</div>
+    <div class="header-date"><span class="live-dot"></span>Datos simulados · Q2 2024</div>
+  </div>
+</header>
+
+<div class="nav-tabs">
+  <button class="tab active" onclick="showTab(0)"><span class="tab-num">1</span>Resumen Ejecutivo</button>
+  <button class="tab" onclick="showTab(1)"><span class="tab-num">2</span>Customer Journey</button>
+  <button class="tab" onclick="showTab(2)"><span class="tab-num">3</span>Adopción Digital</button>
+  <button class="tab" onclick="showTab(3)"><span class="tab-num">4</span>Valor para el Cliente</button>
+  <button class="tab" onclick="showTab(4)"><span class="tab-num">5</span>Rendimiento Innovación</button>
+  <button class="tab" onclick="showTab(5)"><span class="tab-num">6</span>Colaboración Interfuncional</button>
+  <button class="tab" onclick="showTab(6)"><span class="tab-num">⚠</span>Riesgos</button>
+</div>
+
+<div class="filter-bar">
+  <span class="filter-label">Segmento</span>
+  <button class="persona-btn active-all" onclick="fp('all',this)">Todos</button>
+  <button class="persona-btn" data-p="Nathan" onclick="fp('Nathan',this)">🔴 Nathan</button>
+  <button class="persona-btn" data-p="Olivia" onclick="fp('Olivia',this)">🟡 Olivia</button>
+  <button class="persona-btn" data-p="Ida" onclick="fp('Ida',this)">🟢 Ida</button>
+  <button class="persona-btn" data-p="Daniel" onclick="fp('Daniel',this)">🔵 Daniel</button>
+  <div class="sep"></div>
+  <span class="filter-label" style="font-size:10px">Período:</span>
+  <button class="persona-btn active-all">Q2 2024</button>
+</div>
+
+<div class="content">
+
+<!-- ═══ S1 RESUMEN EJECUTIVO ═══ -->
+<div class="section active" id="s0">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">01</span> Resumen Ejecutivo Estratégico</div>
+    <div class="section-subtitle">Panorama consolidado · Pivote Innovación Centrada en el Cliente</div></div>
+    <div class="section-tag">EXECUTIVE SCORECARD</div>
+  </div>
+  <div class="grid-4">
+    <div class="kpi-card green"><div class="kpi-label"><span class="sem s-g"></span>Índice Innov. Centrada Cliente</div><div class="kpi-value green">78.4<span class="kpi-unit">%</span></div><div class="kpi-trend"><span class="up">▲ +6.2 pp</span>&nbsp;<span class="flat">vs Q1 2024</span></div><div class="kpi-formula">= (Adopción × CSAT × Retención) / Target</div><div class="kpi-rec">✓ Sobre benchmark sectorial (65%)</div></div>
+    <div class="kpi-card green"><div class="kpi-label"><span class="sem s-g"></span>Adopción Activa myRAzept</div><div class="kpi-value green">1,150<span class="kpi-unit">usuarios</span></div><div class="kpi-trend"><span class="up">▲ +12%</span>&nbsp;<span class="flat">activos 30 d</span></div><div class="kpi-formula">= Usuarios con ≥ 1 sesión / mes</div><div class="kpi-rec">✓ 11.5% del mercado potencial (10 000)</div></div>
+    <div class="kpi-card amber"><div class="kpi-label"><span class="sem s-a"></span>Tiempo al Primer Valor</div><div class="kpi-value amber">4.3<span class="kpi-unit">días</span></div><div class="kpi-trend"><span class="up">▼ −0.8 d</span>&nbsp;<span class="flat">vs Q1</span></div><div class="kpi-formula">= Días registro → 1ª etiqueta generada</div><div class="kpi-rec">⚡ Nathan promedia 8.1 d — intervención urgente</div></div>
+    <div class="kpi-card green"><div class="kpi-label"><span class="sem s-g"></span>CSAT Journey Crítico</div><div class="kpi-value green">7.1<span class="kpi-unit">/10</span></div><div class="kpi-trend"><span class="up">▲ +0.4</span>&nbsp;<span class="flat">vs Q1 2024</span></div><div class="kpi-formula">= Media satisfacción etiquetado + recetas</div><div class="kpi-rec">✓ Ida 8.4 · Nathan 5.9</div></div>
+  </div>
+  <div class="grid-4">
+    <div class="kpi-card blue"><div class="kpi-label"><span class="sem s-g"></span>Cumplimiento Etiquetado</div><div class="kpi-value blue">91.3<span class="kpi-unit">%</span></div><div class="kpi-trend"><span class="up">▲ +18 pp</span>&nbsp;<span class="flat">antes del app: ~73%</span></div><div class="kpi-formula">= Etiquetas correctas / Total generadas</div><div class="kpi-rec">⚠ Nathan 82% — riesgo regulatorio activo</div></div>
+    <div class="kpi-card green"><div class="kpi-label"><span class="sem s-g"></span>Reducción Carga Admin.</div><div class="kpi-value green">4.8<span class="kpi-unit">h/sem</span></div><div class="kpi-trend"><span class="up">▲ 34%</span>&nbsp;<span class="flat">tiempo recuperado</span></div><div class="kpi-formula">= Horas_prev – Horas_actual</div><div class="kpi-rec">✓ Ida 7.2 h · Daniel 6.1 h</div></div>
+    <div class="kpi-card amber"><div class="kpi-label"><span class="sem s-a"></span>Índice Rendimiento Interfuncional</div><div class="kpi-value amber">72.1<span class="kpi-unit">%</span></div><div class="kpi-trend"><span class="flat">→ Dept. Legal rezagado</span></div><div class="kpi-formula">= Ω(SLA_cumplidos / SLA_total)</div><div class="kpi-rec">⚡ Legal 61% · IT 88%</div></div>
+    <div class="kpi-card green"><div class="kpi-label"><span class="sem s-g"></span>ROI de Innovación</div><div class="kpi-value green">3.2<span class="kpi-unit">×</span></div><div class="kpi-trend"><span class="up">▲ +0.6×</span>&nbsp;<span class="flat">vs proyección</span></div><div class="kpi-formula">= (Valor_generado – Coste) / Coste</div><div class="kpi-rec">✓ CLV promedio €7 342 · Payback 8.3 m</div></div>
+  </div>
+
+  <div class="grid-2-1">
+    <div class="card">
+      <div class="ct">Insights Automáticos Estratégicos <span class="badge">IA Analítica</span></div>
+      <div class="ic ok"><span class="ic-text"><strong>🚀 Digital Daniel adopta 3.4× más rápido que Nathan.</strong> Tiempo al primer valor: Daniel 1.8 d vs Nathan 8.1 d. Activar co-creación con Daniel como early adopter.</span></div>
+      <div class="ic alert"><span class="ic-text"><strong>⛔ 68% del abandono ocurre antes de la 1ª etiqueta.</strong> El paso Registro→Etiqueta es el cuello de botella crítico del journey.</span></div>
+      <div class="ic warn"><span class="ic-text"><strong>⚠️ Legal ralentiza features en 34 días promedio.</strong> 3 funcionalidades en backlog bloqueadas por aprobación jurídica.</span></div>
+      <div class="ic info"><span class="ic-text"><strong>💡 Carnicerías pequeñas (1–3 emp.) muestran mayor engagement.</strong> NPS promedio +8.2 vs grandes (+3.1).</span></div>
+      <div class="ic ok"><span class="ic-text"><strong>📈 Ahorro admin > 5 h/sem = 89% retención a 90 d.</strong> Vs 61% del grupo de bajo ahorro. Principal palanca de retención identificada.</span></div>
+    </div>
+    <div class="card">
+      <div class="ct">Scorecard por Persona</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:13px">
+        <span class="pb pb-n">Nathan</span><span class="pb pb-o">Olivia</span><span class="pb pb-i">Ida</span><span class="pb pb-d">Daniel</span>
+      </div>
+      <div class="pr"><div class="pr-lbl"><span>Adopción Activa</span><span style="color:var(--muted)">38 / 67 / 84 / 96%</span></div>
+        <div style="display:grid;gap:4px"><div class="pr-trk"><div class="pr-fill" style="width:38%;background:var(--nathan)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:67%;background:var(--olivia)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:84%;background:var(--ida)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:96%;background:var(--daniel)"></div></div></div></div>
+      <div class="pr"><div class="pr-lbl"><span>CSAT /10</span><span style="color:var(--muted)">5.9 / 6.8 / 8.4 / 7.9</span></div>
+        <div style="display:grid;gap:4px"><div class="pr-trk"><div class="pr-fill" style="width:59%;background:var(--nathan)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:68%;background:var(--olivia)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:84%;background:var(--ida)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:79%;background:var(--daniel)"></div></div></div></div>
+      <div class="pr"><div class="pr-lbl"><span>Retención 90 d</span><span style="color:var(--muted)">42 / 71 / 88 / 94%</span></div>
+        <div style="display:grid;gap:4px"><div class="pr-trk"><div class="pr-fill" style="width:42%;background:var(--nathan)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:71%;background:var(--olivia)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:88%;background:var(--ida)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:94%;background:var(--daniel)"></div></div></div></div>
+      <div class="pr" style="margin:0"><div class="pr-lbl"><span>Riesgo Abandono</span><span style="color:var(--muted)">72 / 38 / 14 / 6%</span></div>
+        <div style="display:grid;gap:4px"><div class="pr-trk"><div class="pr-fill" style="width:72%;background:var(--nathan)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:38%;background:var(--olivia)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:14%;background:var(--ida)"></div></div><div class="pr-trk"><div class="pr-fill" style="width:6%;background:var(--daniel)"></div></div></div></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card"><div class="ct">Evolución Usuarios Activos — 12 Meses</div><div class="cw"><canvas id="adoptionTrendChart"></canvas></div></div>
+    <!-- Stacked horizontal bar replaces donut for persona distribution -->
+    <div class="card"><div class="ct">Distribución de Personas · Base Activa (N=1 150)</div><div class="cw"><canvas id="personaDistChart"></canvas></div></div>
+  </div>
+  <div class="data-note">⚙ Datos simulados · Glismann et al. (2021) "How RAPS Spiced Up the German Butcher's Trade" · Springer · Para uso estratégico interno</div>
+</div>
+
+<!-- ═══ S2 CUSTOMER JOURNEY ═══ -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">02</span> Customer Journey Analytics</div>
+    <div class="section-subtitle">Embudo de activación · Fricción · Abandono · Tiempo al Valor</div></div>
+    <div class="section-tag">JOURNEY INTELLIGENCE</div>
+  </div>
+  <div class="grid-2-1">
+    <div class="card">
+      <div class="ct">Embudo de Activación myRAzept <span class="badge">N=1 150</span></div>
+      <div class="fs"><div class="flbl">1. Registro</div><div class="fbw"><div class="fb" style="width:100%;background:linear-gradient(90deg,#00C9B1,#38BDF8);color:#0D1B2A">1 150 · 100%</div></div></div>
+      <div class="fs"><div class="flbl">2. Primera Etiqueta</div><div class="fbw"><div class="fb" style="width:62%;background:linear-gradient(90deg,#22D3A5,#00C9B1);color:#0D1B2A">713 · 62%</div></div></div>
+      <div class="fs"><div class="flbl">3. Gestión Recetas</div><div class="fbw"><div class="fb" style="width:54%;background:linear-gradient(90deg,#38BDF8,#4c7ef5)">621 · 54%</div></div></div>
+      <div class="fs"><div class="flbl">4. Primer Pedido</div><div class="fbw"><div class="fb" style="width:38%;background:linear-gradient(90deg,#F59E0B,#c87f00)">437 · 38%</div></div></div>
+      <div class="fs"><div class="flbl">5. Uso Recurrente</div><div class="fbw"><div class="fb" style="width:71%;background:linear-gradient(90deg,#22D3A5,#38BDF8);color:#0D1B2A">820 · 71% ✓</div></div></div>
+      <div class="ic alert" style="margin-top:10px"><span class="ic-text"><strong>Mayor abandono: Registro → Primera Etiqueta (−38%).</strong> Nathan abandona aquí en 68% de casos. Barrera: complejidad inicial percibida.</span></div>
+    </div>
+    <div class="card">
+      <!-- Horizontal bar, ordered worst → best (Nathan top) -->
+      <div class="ct">Días al Primer Valor · Por Persona</div>
+      <div class="cw"><canvas id="timeToValueChart"></canvas></div>
+      <div class="ic info" style="margin-top:10px"><span class="ic-text">Ratio Nathan/Daniel = <strong>4.5×</strong>. Objetivo global ≤ 3 días.</span></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="ct">Heatmap Fricción por Etapa × Persona <span class="badge">1=baja · 10=alta</span></div>
+      <div id="heatmapCont"></div>
+    </div>
+    <!-- Horizontal bar ordered desc replaces donut for abandonment reasons -->
+    <div class="card"><div class="ct">Motivos de Abandono · Mayor → Menor Frecuencia</div><div class="cw"><canvas id="abandonChart"></canvas></div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="ct">% Abandono por Etapa × Persona</div><div class="cw"><canvas id="dropoffChart"></canvas></div></div>
+    <div class="card"><div class="ct">Journeys Exitosos vs Fallidos · Por Persona (%)</div><div class="cw"><canvas id="journeyChart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ═══ S3 ADOPCIÓN DIGITAL ═══ -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">03</span> Adopción Digital</div>
+    <div class="section-subtitle">Engagement · Cohortes · Retención · Features · Frecuencia</div></div>
+    <div class="section-tag">DIGITAL ADOPTION ANALYTICS</div>
+  </div>
+  <div class="grid-4">
+    <div class="kpi-card green"><div class="kpi-label">Usuarios Activos 30 d (MAU)</div><div class="kpi-value green">820</div><div class="kpi-trend"><span class="up">▲ +11%</span><span class="flat"> vs mes anterior</span></div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Sesiones / Usuario / Mes</div><div class="kpi-value blue">6.2</div><div class="kpi-trend"><span class="flat">→ Estable</span></div></div>
+    <div class="kpi-card green"><div class="kpi-label">Retención 90 días</div><div class="kpi-value green">74.3<span class="kpi-unit">%</span></div><div class="kpi-trend"><span class="up">▲ +8 pp</span><span class="flat"> vs Q3 2023</span></div></div>
+    <div class="kpi-card amber"><div class="kpi-label">Breadth de Features Usadas</div><div class="kpi-value amber">2.8<span class="kpi-unit">/5</span></div><div class="kpi-trend"><span class="flat">→ Mejora lenta</span></div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="ct">Análisis de Cohortes — Retención Mensual <span class="badge">5 cohortes</span></div><div class="cw tall"><canvas id="cohortChart"></canvas></div></div>
+    <!-- Horizontal bar ordered desc replaces vertical with long labels -->
+    <div class="card"><div class="ct">Features: Tasa de Uso Mensual · Mayor → Menor</div><div class="cw tall"><canvas id="featureChart"></canvas></div></div>
+  </div>
+  <div class="grid-3">
+    <div class="card"><div class="ct">Frecuencia de Uso por Persona (%)</div><div class="cw"><canvas id="freqChart"></canvas></div></div>
+    <!-- Stacked horizontal bar replaces donut for device composition -->
+    <div class="card"><div class="ct">Dispositivo Principal — Composición</div><div class="cw"><canvas id="deviceChart"></canvas></div></div>
+    <!-- Horizontal bar ordered desc for shop size -->
+    <div class="card"><div class="ct">Adopción por Tamaño de Negocio</div><div class="cw"><canvas id="shopChart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ═══ S4 VALOR AL CLIENTE ═══ -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">04</span> Valor para el Cliente</div>
+    <div class="section-subtitle">Ahorro · Cumplimiento · Eficiencia · Satisfacción</div></div>
+    <div class="section-tag">CUSTOMER VALUE ANALYTICS</div>
+  </div>
+  <div class="grid-3">
+    <div class="kpi-card green"><div class="kpi-label">Ahorro Semanal Promedio</div><div class="kpi-value green">4.8<span class="kpi-unit">h/sem</span></div><div class="kpi-trend"><span class="up">▲ 34%</span><span class="flat"> tiempo recuperado</span></div><div class="kpi-rec">Ida 7.2 · Daniel 6.1 · Olivia 4.3 · Nathan 2.1 h</div></div>
+    <div class="kpi-card green"><div class="kpi-label">Cumplimiento Etiquetado</div><div class="kpi-value green">91.3<span class="kpi-unit">%</span></div><div class="kpi-trend"><span class="up">▲ +18 pp</span><span class="flat"> vs baseline</span></div><div class="kpi-rec">Nathan 82% — zona de riesgo regulatorio</div></div>
+    <div class="kpi-card blue"><div class="kpi-label">NPS Promedio</div><div class="kpi-value blue">+38<span class="kpi-unit">pts</span></div><div class="kpi-trend"><span class="up">▲ +11</span><span class="flat"> vs Q1 2024</span></div><div class="kpi-rec">Ida +52 · Daniel +47 · Olivia +28 · Nathan +6</div></div>
+  </div>
+  <div class="grid-2">
+    <!-- Grouped bar, single Y axis, same unit (h/sem) -->
+    <div class="card"><div class="ct">Carga Administrativa Antes vs Después · h/sem por Persona</div><div class="cw"><canvas id="adminChart"></canvas></div></div>
+    <div class="card"><div class="ct">Valor Percibido por Dimensión · Radar por Persona</div><div class="cw"><canvas id="radarChart"></canvas></div></div>
+  </div>
+  <div class="grid-3">
+    <!-- Histogram of satisfaction scores — bar, not donut -->
+    <div class="card"><div class="ct">Satisfacción Global — Histograma de Puntajes</div><div class="cw"><canvas id="satChart"></canvas></div></div>
+    <!-- Line without smoothing -->
+    <div class="card"><div class="ct">Reducción de Errores en Etiquetado — Evolución</div><div class="cw"><canvas id="errorChart"></canvas></div></div>
+    <div class="card">
+      <div class="ct">Reducción de Tiempo por Tipo de Tarea</div>
+      <div style="padding-top:6px">
+        <!-- Ordered desc by saving % -->
+        <div class="cbr"><div class="cbr-dept">Revisión nutric.</div><div class="cbr-bw"><div class="cbr-b" style="width:82%;background:var(--green)"></div></div><div class="cbr-val" style="color:var(--green)">−82%</div></div>
+        <div class="cbr"><div class="cbr-dept">Etiqueta nueva</div><div class="cbr-bw"><div class="cbr-b" style="width:78%;background:var(--green)"></div></div><div class="cbr-val" style="color:var(--green)">−78%</div></div>
+        <div class="cbr"><div class="cbr-dept">Receta manual</div><div class="cbr-bw"><div class="cbr-b" style="width:65%;background:var(--teal)"></div></div><div class="cbr-val" style="color:var(--teal)">−65%</div></div>
+        <div class="cbr"><div class="cbr-dept">Plan semanal</div><div class="cbr-bw"><div class="cbr-b" style="width:60%;background:var(--teal)"></div></div><div class="cbr-val" style="color:var(--teal)">−60%</div></div>
+        <div class="cbr" style="border:none"><div class="cbr-dept">Pedido proveedor</div><div class="cbr-bw"><div class="cbr-b" style="width:56%;background:var(--cyan)"></div></div><div class="cbr-val" style="color:var(--cyan)">−56%</div></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:9px">% reducción vs proceso manual · ordenado mayor → menor ahorro</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S5 RENDIMIENTO INNOVACIÓN ═══ -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">05</span> Rendimiento de Innovación</div>
+    <div class="section-subtitle">ROI · TTM · Feedback Loop · Feature Success · Impacto</div></div>
+    <div class="section-tag">INNOVATION PERFORMANCE</div>
+  </div>
+  <div class="grid-4">
+    <div class="kpi-card green"><div class="kpi-label">ROI de Innovación</div><div class="kpi-value green">3.2<span class="kpi-unit">×</span></div><div class="kpi-trend"><span class="up">▲ vs 2.1× target</span></div></div>
+    <div class="kpi-card amber"><div class="kpi-label">Time-to-Market (avg)</div><div class="kpi-value amber">87<span class="kpi-unit">días</span></div><div class="kpi-trend"><span class="flat">→ Objetivo: 60 d</span></div></div>
+    <div class="kpi-card green"><div class="kpi-label">Features Lanzadas YTD</div><div class="kpi-value green">14<span class="kpi-unit">módulos</span></div><div class="kpi-trend"><span class="up">▲ +4</span><span class="flat"> vs plan</span></div></div>
+    <div class="kpi-card blue"><div class="kpi-label">Tasa de Éxito Features</div><div class="kpi-value blue">71<span class="kpi-unit">%</span></div><div class="kpi-trend"><span class="up">▲ benchmark: 58%</span></div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="ct">Matriz Impacto × Esfuerzo — Features Clave</div><div class="cw tall"><canvas id="scatterChart"></canvas></div></div>
+    <div class="card">
+      <div class="ct">Ciclo Feedback → Innovación</div>
+      <div style="padding:8px 0">
+        <div class="tli"><div class="tl-dot" style="background:var(--teal)"></div><div><div class="tl-d">Colección de Feedback</div><div class="tl-t">Encuestas in-app + Sales Force</div><div class="tl-desc">~340 feedbacks/mes procesados</div></div></div>
+        <div class="tli"><div class="tl-dot" style="background:var(--cyan)"></div><div><div class="tl-d">Análisis & Priorización</div><div class="tl-t">Scoring Impacto × Frecuencia</div><div class="tl-desc">Tiempo promedio: 5.2 días laborables</div></div></div>
+        <div class="tli"><div class="tl-dot" style="background:var(--amber)"></div><div><div class="tl-d">Desarrollo Ágil</div><div class="tl-t">Sprints 2 sem · Revisión con clientes</div><div class="tl-desc">Participación activa de Daniel e Ida</div></div></div>
+        <div class="tli"><div class="tl-dot" style="background:var(--green)"></div><div><div class="tl-d">Lanzamiento & Medición</div><div class="tl-t">Deploy + KPIs a 7 d / 30 d / 90 d</div><div class="tl-desc">Performance tracking semanal al CEO</div></div></div>
+      </div>
+      <div class="ic warn"><span class="ic-text"><strong>⚡ Cuello de botella Legal:</strong> aprobación jurídica añade 34 días promedio. 3 features bloqueadas.</span></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <!-- tension:0 — no smoothing on line charts -->
+    <div class="card"><div class="ct">Adopción de Features Nuevas · Semanas Post-Lanzamiento</div><div class="cw"><canvas id="featAdoptChart"></canvas></div></div>
+    <!-- Single Y axis (×), no dual axis -->
+    <div class="card"><div class="ct">ROI Acumulado vs Target — 12 Meses</div><div class="cw"><canvas id="roiChart"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ═══ S6 COLABORACIÓN ═══ -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">06</span> Colaboración Interfuncional</div>
+    <div class="section-subtitle">Alineación organizacional · SLAs · Bloqueos · Madurez Digital</div></div>
+    <div class="section-tag">ORGANIZATIONAL INTELLIGENCE</div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="ct">Índice de Desempeño por Área · Mayor → Menor <span class="badge">SLA Tracker</span></div>
+      <!-- Ordered desc -->
+      <div class="cbr"><div class="cbr-dept" style="color:var(--green)">TI / Desarrollo</div><div class="cbr-bw"><div class="cbr-b" style="width:88%;background:linear-gradient(90deg,var(--green),var(--teal))"></div></div><div class="cbr-val" style="color:var(--green)">88%</div></div>
+      <div class="cbr"><div class="cbr-dept" style="color:var(--green)">Ventas / Sales</div><div class="cbr-bw"><div class="cbr-b" style="width:85%;background:linear-gradient(90deg,var(--green),var(--teal))"></div></div><div class="cbr-val" style="color:var(--green)">85%</div></div>
+      <div class="cbr"><div class="cbr-dept" style="color:var(--teal)">Marketing</div><div class="cbr-bw"><div class="cbr-b" style="width:82%;background:linear-gradient(90deg,var(--teal),var(--cyan))"></div></div><div class="cbr-val" style="color:var(--teal)">82%</div></div>
+      <div class="cbr"><div class="cbr-dept" style="color:var(--cyan)">Soporte / CS</div><div class="cbr-bw"><div class="cbr-b" style="width:78%;background:linear-gradient(90deg,var(--cyan),#4c7ef5)"></div></div><div class="cbr-val" style="color:var(--cyan)">78%</div></div>
+      <div class="cbr"><div class="cbr-dept" style="color:var(--amber)">Operaciones</div><div class="cbr-bw"><div class="cbr-b" style="width:74%;background:linear-gradient(90deg,var(--amber),#c87f00)"></div></div><div class="cbr-val" style="color:var(--amber)">74%</div></div>
+      <div class="cbr" style="border:none"><div class="cbr-dept" style="color:var(--red)">Legal / Regulat.</div><div class="cbr-bw"><div class="cbr-b" style="width:61%;background:linear-gradient(90deg,var(--red),#c43030)"></div></div><div class="cbr-val" style="color:var(--red)">61%</div></div>
+      <div class="ic alert" style="margin-top:12px"><span class="ic-text"><strong>🚨 Legal crítico:</strong> SLA 34 días vs objetivo 10. 3 features bloqueadas. Recomendación: fast-track jurídico.</span></div>
+    </div>
+    <div class="card"><div class="ct">Red de Interdependencias — Radar Multidimensional</div><div class="cw tall"><canvas id="collabRadar"></canvas></div></div>
+  </div>
+  <div class="grid-3">
+    <!-- Horizontal bar ordered desc -->
+    <div class="card"><div class="ct">Madurez Digital por Área · Mayor → Menor</div><div class="cw"><canvas id="maturityChart"></canvas></div></div>
+    <!-- Grouped bars same unit (días) — no double axis -->
+    <div class="card"><div class="ct">Días de Respuesta: Actual vs Objetivo</div><div class="cw"><canvas id="responseChart"></canvas></div></div>
+    <div class="card">
+      <div class="ct">Bloqueos Activos & Estado</div>
+      <table class="et" style="margin-top:4px">
+        <thead><tr><th>Bloqueo</th><th>Área</th><th>Días</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Aprobación GDPR v2</td><td style="color:var(--red)">Legal</td><td style="color:var(--red)">41</td><td><span class="pill pc">Bloqueado</span></td></tr>
+          <tr><td>Integración Báscula</td><td style="color:var(--red)">Legal</td><td style="color:var(--red)">29</td><td><span class="pill pc">Bloqueado</span></td></tr>
+          <tr><td>API ERP SAP sync</td><td style="color:var(--amber)">TI</td><td style="color:var(--amber)">18</td><td><span class="pill pm">En proceso</span></td></tr>
+          <tr><td>Imágenes recetas Q3</td><td style="color:var(--amber)">Marketing</td><td style="color:var(--amber)">12</td><td><span class="pill pm">En proceso</span></td></tr>
+          <tr><td>Training Sales Force</td><td style="color:var(--green)">RRHH</td><td style="color:var(--green)">3</td><td><span class="pill pl">Resuelto</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ S7 RIESGOS ═══ -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div><div class="section-title"><span class="accent">07</span> Panel de Riesgos Estratégicos</div>
+    <div class="section-subtitle">Impacto · Probabilidad · Severidad · Mitigación</div></div>
+    <div class="section-tag">RISK INTELLIGENCE</div>
+  </div>
+  <div class="grid-2">
+    <div class="card"><div class="ct">Matriz de Riesgos — Impacto × Probabilidad</div><div class="cw tall"><canvas id="riskMatrix"></canvas></div></div>
+    <!-- Horizontal bar ordered desc -->
+    <div class="card"><div class="ct">Severidad de Riesgos · Mayor → Menor</div><div class="cw tall"><canvas id="riskBar"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="ct">Registro de Riesgos Ejecutivo <span class="badge">7 Riesgos</span></div>
+    <div class="rr hd"><div>Riesgo</div><div>Impacto</div><div>Prob.</div><div>Severidad</div><div>Plan de Mitigación</div><div>Responsable</div></div>
+    <div class="rr"><div style="font-weight:500">Resistencia al cambio (Nathan)</div><div><span class="pill ph">Alto</span></div><div><span class="pill ph">Alta</span></div><div><span class="pill pc">Crítico</span></div><div style="font-size:10px;color:var(--muted)">Asesor digital dedicado, onboarding presencial, gamificación progresiva</div><div style="font-size:10px;color:var(--cyan)">Sales + Soporte</div></div>
+    <div class="rr"><div style="font-weight:500">Errores regulatorios etiquetado</div><div><span class="pill ph">Alto</span></div><div><span class="pill pm">Media</span></div><div><span class="pill ph">Alto</span></div><div style="font-size:10px;color:var(--muted)">Validación automática pre-impresión, alertas en tiempo real, auditoría</div><div style="font-size:10px;color:var(--cyan)">Legal + TI</div></div>
+    <div class="rr"><div style="font-weight:500">Baja adopción en segmentos clave</div><div><span class="pill ph">Alto</span></div><div><span class="pill pm">Media</span></div><div><span class="pill ph">Alto</span></div><div style="font-size:10px;color:var(--muted)">Segmentación personalizada, campañas diferenciadas, NPS triggers</div><div style="font-size:10px;color:var(--cyan)">Marketing + Ventas</div></div>
+    <div class="rr"><div style="font-weight:500">Fragmentación interna / silos</div><div><span class="pill pm">Medio</span></div><div><span class="pill pm">Media</span></div><div><span class="pill pm">Moderado</span></div><div style="font-size:10px;color:var(--muted)">OKRs interfuncionales, reuniones cross-dept, dashboard compartido</div><div style="font-size:10px;color:var(--cyan)">CEO + Dirección</div></div>
+    <div class="rr"><div style="font-weight:500">Complejidad excesiva del producto</div><div><span class="pill pm">Medio</span></div><div><span class="pill pm">Media</span></div><div><span class="pill pm">Moderado</span></div><div style="font-size:10px;color:var(--muted)">UX testing iterativo, simplificación, progressive disclosure</div><div style="font-size:10px;color:var(--cyan)">TI + UX</div></div>
+    <div class="rr"><div style="font-weight:500">Baja calidad de datos de recetas</div><div><span class="pill ph">Alto</span></div><div><span class="pill pl">Baja</span></div><div><span class="pill pm">Moderado</span></div><div style="font-size:10px;color:var(--muted)">Data governance, revisión trimestral ERP, validación por expertos</div><div style="font-size:10px;color:var(--cyan)">TI + R&D</div></div>
+    <div class="rr" style="border:none"><div style="font-weight:500">ROI insuficiente a largo plazo</div><div><span class="pill ph">Alto</span></div><div><span class="pill pl">Baja</span></div><div><span class="pill pm">Moderado</span></div><div style="font-size:10px;color:var(--muted)">Upsell, CLV tracking, integración pedidos recurrentes</div><div style="font-size:10px;color:var(--cyan)">CFO + Estrategia</div></div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="ct">Decisiones Estratégicas Prioritarias</div>
+      <div class="ic alert"><span class="ic-text"><strong>🎯 Dec. 1:</strong> Fast-track legal. Target: TTM 87 d → 50 d en Q3 2024.</span></div>
+      <div class="ic warn"><span class="ic-text"><strong>🎯 Dec. 2:</strong> Programa Nathan — onboarding presencial para reducir abandono 68% → 35%.</span></div>
+      <div class="ic info"><span class="ic-text"><strong>🎯 Dec. 3:</strong> Co-creación activa con Daniel como embajadores de producto.</span></div>
+      <div class="ic ok"><span class="ic-text"><strong>🎯 Dec. 4:</strong> Módulo pedidos integrado — mayor palanca de CLV identificada.</span></div>
+    </div>
+    <div class="card span2">
+      <div class="ct">Roadmap Estratégico · Próximas Iniciativas</div>
+      <table class="et">
+        <thead><tr><th>Iniciativa</th><th>Persona Target</th><th>Impacto</th><th>Esfuerzo</th><th>Q Target</th></tr></thead>
+        <tbody>
+          <tr><td>Fast-track jurídico features</td><td>Toda la base</td><td><span class="pill ph">Alto</span></td><td><span class="pill pl">Bajo</span></td><td>Q3 2024</td></tr>
+          <tr><td>Programa onboarding presencial Nathan</td><td><span class="pb pb-n">Nathan</span></td><td><span class="pill ph">Alto</span></td><td><span class="pill pm">Medio</span></td><td>Q3 2024</td></tr>
+          <tr><td>Beta co-creación con Daniel</td><td><span class="pb pb-d">Daniel</span></td><td><span class="pill ph">Alto</span></td><td><span class="pill pl">Bajo</span></td><td>Q3 2024</td></tr>
+          <tr><td>Módulo pedidos recurrentes integrado</td><td><span class="pb pb-i">Ida</span> <span class="pb pb-d">Daniel</span></td><td><span class="pill ph">Alto</span></td><td><span class="pill ph">Alto</span></td><td>Q4 2024</td></tr>
+          <tr><td>Alertas regulatorias tiempo real</td><td><span class="pb pb-n">Nathan</span> <span class="pb pb-o">Olivia</span></td><td><span class="pill pm">Medio</span></td><td><span class="pill pm">Medio</span></td><td>Q4 2024</td></tr>
+          <tr><td>Internacionalización myRAzept</td><td>Nueva base</td><td><span class="pill ph">Alto</span></td><td><span class="pill ph">Alto</span></td><td>Q1 2025</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="data-note">⚙ Datos simulados · Glismann et al. (2021) "How RAPS Spiced Up the German Butcher's Trade" · Springer · DOI 10.1007/978-3-030-80003-1_10</div>
+</div>
+
+</div><!-- .content -->
+
+<script>
+// ── DEFAULTS ──
+Chart.defaults.color='#6B8EAE';Chart.defaults.borderColor='rgba(255,255,255,.06)';
+Chart.defaults.font.family="'DM Sans',sans-serif";Chart.defaults.font.size=11;
+
+const C={teal:'#00C9B1',cyan:'#38BDF8',green:'#22D3A5',amber:'#F59E0B',red:'#EF4444',
+  white:'#F0F4F8',muted:'#6B8EAE',nathan:'#EF4444',olivia:'#F59E0B',ida:'#22D3A5',daniel:'#38BDF8'};
+function ra(hex,a){const v=parseInt(hex.slice(1),16);return`rgba(${v>>16},${(v>>8)&255},${v&255},${a})`}
+
+const done={};
+function showTab(i){
+  document.querySelectorAll('.section').forEach((s,j)=>s.classList.toggle('active',j===i));
+  document.querySelectorAll('.tab').forEach((t,j)=>t.classList.toggle('active',j===i));
+  if(!done[i]){charts[i]&&charts[i]();done[i]=true;}
+}
+function fp(p,btn){
+  document.querySelectorAll('.persona-btn').forEach(b=>b.classList.remove('active-all','active-p'));
+  p==='all'?btn.classList.add('active-all'):btn.classList.add('active-p');
+}
+
+function mk(id,type,data,opts={}){
+  const el=document.getElementById(id);if(!el)return;
+  return new Chart(el,{type,data,options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{labels:{color:C.muted,boxWidth:10,padding:11}},
+      tooltip:{backgroundColor:'rgba(13,27,42,.95)',borderColor:ra(C.teal,.3),borderWidth:1,padding:9,titleColor:C.white,bodyColor:C.muted}},
+    ...opts}});
+}
+
+const gx={grid:{color:'rgba(255,255,255,.04)'}};
+const gy={grid:{color:'rgba(255,255,255,.04)'}};
+const noL={plugins:{legend:{display:false}}};
+
+const charts={
+  // ── S1 ──
+  0:()=>{
+    const months=['Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr','May'];
+    mk('adoptionTrendChart','line',{labels:months,datasets:[
+      {label:'Total',data:[320,450,580,680,740,800,870,920,980,1050,1100,1150],borderColor:C.teal,backgroundColor:ra(C.teal,.07),tension:0,fill:true,pointRadius:3,pointBackgroundColor:C.teal},
+      {label:'Daniel',data:[28,40,55,68,78,90,102,112,120,128,135,142],borderColor:C.daniel,tension:0,pointRadius:2,borderDash:[4,3]},
+      {label:'Ida',data:[64,90,116,136,148,160,174,184,196,210,220,230],borderColor:C.ida,tension:0,pointRadius:2,borderDash:[4,3]},
+      {label:'Olivia',data:[96,135,174,204,222,240,261,276,294,315,330,345],borderColor:C.olivia,tension:0,pointRadius:2,borderDash:[4,3]},
+      {label:'Nathan',data:[132,185,235,272,292,310,333,348,370,397,415,433],borderColor:C.nathan,tension:0,pointRadius:2,borderDash:[4,3]},
+    ]},{scales:{x:gx,y:{...gy,ticks:{callback:v=>v>=1000?v/1000+'K':v}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:10,padding:9,font:{size:10}}}}});
+
+    // Stacked horizontal bar — replaces donut
+    mk('personaDistChart','bar',{labels:['Base activa'],datasets:[
+      {label:'Nathan (38%)',data:[37.7],backgroundColor:ra(C.nathan,.78),borderRadius:3},
+      {label:'Olivia (30%)',data:[30.0],backgroundColor:ra(C.olivia,.78),borderRadius:3},
+      {label:'Ida (20%)',data:[20.0],backgroundColor:ra(C.ida,.75),borderRadius:3},
+      {label:'Daniel (12%)',data:[12.3],backgroundColor:ra(C.daniel,.75),borderRadius:3},
+    ]},{indexAxis:'y',
+      plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:10,padding:12}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}`}}},
+      scales:{x:{stacked:true,...gx,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true,grid:{display:false},ticks:{display:false}}}});
+  },
+
+  // ── S2 ──
+  1:()=>{
+    // Horizontal bar ordered by value desc (worst→best)
+    mk('timeToValueChart','bar',{labels:['Nathan','Olivia','Ida','Daniel'],datasets:[
+      {label:'Días al Primer Valor',data:[8.1,4.1,2.6,1.8],
+        backgroundColor:[ra(C.nathan,.72),ra(C.olivia,.72),ra(C.ida,.72),ra(C.daniel,.72)],
+        borderColor:[C.nathan,C.olivia,C.ida,C.daniel],borderWidth:1.5,borderRadius:5}
+    ]},{indexAxis:'y',...noL,scales:{x:{...gx,beginAtZero:true,title:{display:true,text:'Días',color:C.muted}},y:{grid:{display:false}}}});
+
+    // Heatmap
+    const stages=['Registro','1ª Etiqueta','Recetas','Pedido','Recurrente'];
+    const personas=['Nathan','Olivia','Ida','Daniel'];
+    const friction=[[9,8,7,6,5],[6,5,4,4,3],[4,3,3,2,2],[2,2,1,1,1]];
+    const pC=[C.nathan,C.olivia,C.ida,C.daniel];
+    const cont=document.getElementById('heatmapCont');
+    if(cont){
+      let h=`<div style="display:grid;grid-template-columns:70px repeat(5,1fr);gap:3px;padding:6px 4px">`;
+      h+=`<div></div>${stages.map(s=>`<div style="font-size:9.5px;color:var(--muted);text-align:center;padding:2px">${s}</div>`).join('')}`;
+      personas.forEach((p,pi)=>{
+        h+=`<div style="font-size:10px;color:${pC[pi]};display:flex;align-items:center;padding:2px 4px;font-weight:500">${p}</div>`;
+        stages.forEach((_,si)=>{
+          const v=friction[pi][si];
+          const bg=v>=7?`rgba(239,68,68,${v/10})`:v>=4?`rgba(245,158,11,${v/12})`:v>=2?`rgba(34,211,165,${v/15})`:'rgba(0,201,177,.09)';
+          h+=`<div style="background:${bg};height:34px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:rgba(255,255,255,.85)" title="Fricción ${v}/10">${v}</div>`;
+        });
+      });
+      h+=`</div><div style="font-size:10px;color:var(--muted);padding:0 4px 6px">🟥 Alta fricción &nbsp;🟨 Media &nbsp;🟩 Baja</div>`;
+      cont.innerHTML=h;
+    }
+
+    // Horizontal bar ordered desc — replaces donut for abandonment reasons
+    mk('abandonChart','bar',{labels:['Complejidad inicial','Login / acceso','Crash técnico','Datos de recetas','Interfaz / UX','Otro'],
+      datasets:[{label:'% de abandonos',data:[38,18,14,12,11,7],
+        backgroundColor:[ra(C.red,.76),ra(C.amber,.72),ra(C.cyan,.65),ra(C.teal,.65),ra(C.muted,.56),ra(C.muted,.4)],borderRadius:5}]
+    },{indexAxis:'y',...noL,scales:{x:{...gx,beginAtZero:true,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}});
+
+    mk('dropoffChart','bar',{labels:['Reg→Etiqueta','Etiqueta→Receta','Receta→Pedido'],datasets:[
+      {label:'Nathan',data:[68,22,18],backgroundColor:ra(C.nathan,.7),borderRadius:4},
+      {label:'Olivia',data:[35,15,14],backgroundColor:ra(C.olivia,.7),borderRadius:4},
+      {label:'Ida',data:[18,8,6],backgroundColor:ra(C.ida,.7),borderRadius:4},
+      {label:'Daniel',data:[8,4,3],backgroundColor:ra(C.daniel,.7),borderRadius:4},
+    ]},{scales:{x:{grid:{display:false}},y:{...gy,beginAtZero:true,ticks:{callback:v=>v+'%'}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9,font:{size:10}}}}});
+
+    mk('journeyChart','bar',{labels:['Nathan','Olivia','Ida','Daniel'],datasets:[
+      {label:'% Exitoso',data:[42,68,86,94],backgroundColor:[ra(C.nathan,.65),ra(C.olivia,.65),ra(C.ida,.7),ra(C.daniel,.7)],borderColor:[C.nathan,C.olivia,C.ida,C.daniel],borderWidth:1.5,borderRadius:5},
+      {label:'% Fallido',data:[58,32,14,6],backgroundColor:[ra(C.nathan,.2),ra(C.olivia,.2),ra(C.ida,.15),ra(C.daniel,.15)],borderColor:[C.nathan,C.olivia,C.ida,C.daniel],borderWidth:1,borderRadius:5}
+    ]},{scales:{x:{grid:{display:false}},y:{...gy,max:100,beginAtZero:true,ticks:{callback:v=>v+'%'}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9,font:{size:10}}}}});
+  },
+
+  // ── S3 ──
+  2:()=>{
+    mk('cohortChart','line',{labels:['M+0','M+1','M+2','M+3','M+4','M+5'],datasets:[
+      {label:'Ene 2024',data:[100,78,68,61,57,54],borderColor:C.teal,backgroundColor:ra(C.teal,.06),tension:0,fill:true,pointRadius:3},
+      {label:'Feb 2024',data:[100,75,64,58,54,null],borderColor:C.cyan,tension:0,pointRadius:3},
+      {label:'Mar 2024',data:[100,79,70,63,null,null],borderColor:C.ida,tension:0,pointRadius:3},
+      {label:'Abr 2024',data:[100,81,72,null,null,null],borderColor:C.olivia,tension:0,pointRadius:3},
+      {label:'May 2024',data:[100,84,null,null,null,null],borderColor:C.daniel,tension:0,pointRadius:3},
+    ]},{scales:{x:gx,y:{...gy,max:100,beginAtZero:true,ticks:{callback:v=>v+'%'}}},
+      plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:9,padding:9,font:{size:10}}}}});
+
+    // Horizontal bar ordered desc
+    mk('featureChart','bar',{
+      labels:['Gestión Recetas','Etiquetado Auto.','Cálculo Nutric.','Catálogo RAPS','Colecciones','Planif. Semanal','Búsqueda Avanz.','Noticias','Pedidos App','Mkt Materials'],
+      datasets:[{label:'Tasa Uso (%)',data:[92,84,78,71,65,54,48,42,38,22],
+        backgroundColor:[ra(C.teal,.82),ra(C.teal,.74),ra(C.cyan,.7),ra(C.cyan,.64),ra(C.green,.65),ra(C.green,.57),ra(C.muted,.52),ra(C.muted,.45),ra(C.amber,.62),ra(C.red,.52)],borderRadius:4}]
+    },{indexAxis:'y',...noL,scales:{x:{...gx,max:100,beginAtZero:true,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}});
+
+    mk('freqChart','bar',{labels:['Diario','Semanal','Mensual','Raramente'],datasets:[
+      {label:'Nathan',data:[4,18,52,26],backgroundColor:ra(C.nathan,.7),borderRadius:4},
+      {label:'Olivia',data:[12,38,42,8],backgroundColor:ra(C.olivia,.7),borderRadius:4},
+      {label:'Ida',data:[22,48,26,4],backgroundColor:ra(C.ida,.7),borderRadius:4},
+      {label:'Daniel',data:[48,38,12,2],backgroundColor:ra(C.daniel,.7),borderRadius:4},
+    ]},{scales:{x:{grid:{display:false}},y:{...gy,beginAtZero:true,ticks:{callback:v=>v+'%'}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9,font:{size:10}}}}});
+
+    // Stacked horizontal bar replaces donut for device composition
+    mk('deviceChart','bar',{labels:['Distribución'],datasets:[
+      {label:'Smartphone 52%',data:[52],backgroundColor:ra(C.teal,.78),borderRadius:3},
+      {label:'Tablet 31%',data:[31],backgroundColor:ra(C.cyan,.72),borderRadius:3},
+      {label:'Laptop/PC 17%',data:[17],backgroundColor:ra(C.ida,.68),borderRadius:3},
+    ]},{indexAxis:'y',
+      plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:10,padding:11}},
+        tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}`}}},
+      scales:{x:{stacked:true,...gx,max:100,ticks:{callback:v=>v+'%'}},y:{stacked:true,grid:{display:false},ticks:{display:false}}}});
+
+    // Horizontal bar ordered desc
+    mk('shopChart','bar',{
+      labels:['3–5 emp.','1–2 emp.','6–10 emp.','11–15 emp.','>15 emp.'],
+      datasets:[{label:'Tasa Adopción (%)',data:[82,74,68,54,38],
+        backgroundColor:[ra(C.teal,.8),ra(C.teal,.7),ra(C.cyan,.68),ra(C.amber,.65),ra(C.red,.6)],borderRadius:5}]
+    },{indexAxis:'y',...noL,scales:{x:{...gx,max:100,beginAtZero:true,ticks:{callback:v=>v+'%'}},y:{grid:{display:false}}}});
+  },
+
+  // ── S4 ──
+  3:()=>{
+    // Grouped bar, single Y axis (h/sem)
+    mk('adminChart','bar',{labels:['Nathan','Olivia','Ida','Daniel','Promedio'],datasets:[
+      {label:'Antes (h/sem)',data:[20.2,14.8,11.4,10.2,14.2],backgroundColor:ra(C.red,.45),borderColor:C.red,borderWidth:1.5,borderRadius:4},
+      {label:'Después (h/sem)',data:[18.1,10.5,4.2,4.1,9.4],backgroundColor:ra(C.teal,.68),borderColor:C.teal,borderWidth:1.5,borderRadius:4},
+    ]},{scales:{x:{grid:{display:false}},y:{...gy,beginAtZero:true,title:{display:true,text:'Horas / semana',color:C.muted}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9}}}});
+
+    mk('radarChart','radar',{labels:['Ahorro Tiempo','Cumplim. Legal','Calidad Datos','Experiencia UX','Pedidos Ágiles','Recetas Valor'],datasets:[
+      {label:'Nathan',data:[3.1,4.2,3.8,3.4,2.9,3.6],borderColor:C.nathan,backgroundColor:ra(C.nathan,.07),pointBackgroundColor:C.nathan,pointRadius:3},
+      {label:'Olivia',data:[6.2,6.8,6.4,6.1,5.8,6.5],borderColor:C.olivia,backgroundColor:ra(C.olivia,.07),pointBackgroundColor:C.olivia,pointRadius:3},
+      {label:'Ida',data:[8.4,8.2,8.1,7.8,7.6,8.4],borderColor:C.ida,backgroundColor:ra(C.ida,.07),pointBackgroundColor:C.ida,pointRadius:3},
+      {label:'Daniel',data:[7.8,8.0,8.4,8.8,7.2,8.0],borderColor:C.daniel,backgroundColor:ra(C.daniel,.07),pointBackgroundColor:C.daniel,pointRadius:3},
+    ]},{plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:9,padding:10,font:{size:10}}}},
+      scales:{r:{angleLines:{color:'rgba(255,255,255,.06)'},grid:{color:'rgba(255,255,255,.06)'},pointLabels:{color:C.white,font:{size:10}},ticks:{display:false},min:0,max:10}}});
+
+    // Satisfaction histogram — bar ordered by score range
+    mk('satChart','bar',{labels:['1–3','4–5','6–7','8–9','10'],datasets:[
+      {label:'Usuarios',data:[42,98,312,421,277],
+        backgroundColor:[ra(C.red,.7),ra(C.amber,.7),ra(C.cyan,.65),ra(C.teal,.75),ra(C.green,.82)],borderRadius:5}
+    ]},{...noL,scales:{x:{grid:{display:false},title:{display:true,text:'Puntaje Satisfacción',color:C.muted}},y:{...gy,beginAtZero:true}},
+      plugins:{...noL.plugins,tooltip:{callbacks:{label:ctx=>`${ctx.raw} usuarios`}}}});
+
+    // Line tension:0 — no smoothing
+    mk('errorChart','line',{labels:['Mes 1','Mes 2','Mes 3','Mes 4','Mes 5','Mes 6'],datasets:[
+      {label:'Sin App',data:[28,28,27,28,27,28],borderColor:ra(C.red,.6),backgroundColor:ra(C.red,.05),tension:0,fill:true,borderDash:[4,3],pointRadius:3},
+      {label:'Con App',data:[28,22,16,11,8,7],borderColor:C.teal,backgroundColor:ra(C.teal,.07),tension:0,fill:true,pointRadius:4,pointBackgroundColor:C.teal},
+    ]},{scales:{x:gx,y:{...gy,beginAtZero:true,title:{display:true,text:'% Error Rate',color:C.muted}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9}}}});
+  },
+
+  // ── S5 ──
+  4:()=>{
+    mk('scatterChart','scatter',{datasets:[
+      {label:'Etiquetado Auto.',data:[{x:2,y:9.2}],backgroundColor:C.teal,pointRadius:14},
+      {label:'Gestión Recetas',data:[{x:3,y:8.8}],backgroundColor:C.cyan,pointRadius:13},
+      {label:'Cálculo Nutric.',data:[{x:3,y:8.4}],backgroundColor:C.green,pointRadius:12},
+      {label:'Pedidos App',data:[{x:7,y:8.1}],backgroundColor:C.olivia,pointRadius:11},
+      {label:'Integrac. ERP',data:[{x:9,y:7.8}],backgroundColor:C.amber,pointRadius:11},
+      {label:'Planif. Semanal',data:[{x:5,y:6.8}],backgroundColor:C.daniel,pointRadius:10},
+      {label:'Marketing Mat.',data:[{x:6,y:5.2}],backgroundColor:C.muted,pointRadius:9},
+      {label:'Chatbot Soporte',data:[{x:8,y:4.8}],backgroundColor:ra(C.red,.72),pointRadius:9},
+    ]},{plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:8,padding:9,font:{size:9}}}},
+      scales:{x:{title:{display:true,text:'Esfuerzo →',color:C.muted},min:0,max:11,...gx,beginAtZero:true},y:{title:{display:true,text:'Impacto →',color:C.muted},min:0,max:11,...gy}}});
+
+    // tension:0
+    mk('featAdoptChart','line',{labels:['Sem 1','Sem 2','Sem 3','Sem 4','Sem 6','Sem 8','Sem 12'],datasets:[
+      {label:'Etiquetado (Core)',data:[68,76,80,84,87,90,92],borderColor:C.teal,backgroundColor:ra(C.teal,.06),tension:0,fill:true,pointRadius:3},
+      {label:'Recetas v2',data:[12,28,42,55,64,70,74],borderColor:C.cyan,tension:0,pointRadius:3},
+      {label:'Pedidos Integr.',data:[4,10,18,24,30,35,38],borderColor:C.amber,tension:0,pointRadius:3},
+    ]},{scales:{x:gx,y:{...gy,max:100,beginAtZero:true,ticks:{callback:v=>v+'%'}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9,font:{size:10}}}}});
+
+    // Single Y axis (×), tension:0
+    mk('roiChart','line',{labels:['M1','M2','M3','M4','M5','M6','M7','M8','M9','M10','M11','M12'],datasets:[
+      {label:'ROI Acumulado (×)',data:[-1.0,-0.8,-0.4,0.1,0.5,0.9,1.3,1.8,2.2,2.6,2.9,3.2],borderColor:C.green,backgroundColor:ra(C.green,.07),tension:0,fill:true,pointRadius:3,pointBackgroundColor:C.green},
+      {label:'Target (×)',data:[-1.0,-0.9,-0.6,-0.2,0.2,0.5,0.9,1.2,1.5,1.8,2.1,2.4],borderColor:ra(C.white,.28),tension:0,borderDash:[4,3],pointRadius:2},
+    ]},{scales:{x:gx,y:{...gy,title:{display:true,text:'ROI (×)',color:C.muted},ticks:{callback:v=>v+'×'}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9}}}});
+  },
+
+  // ── S6 ──
+  5:()=>{
+    mk('collabRadar','radar',{labels:['TI / Dev','Ventas','Marketing','Soporte','Operaciones','Legal'],datasets:[
+      {label:'Índice Colaboración',data:[88,85,82,78,74,61],borderColor:C.teal,backgroundColor:ra(C.teal,.09),pointBackgroundColor:C.teal,pointRadius:4},
+      {label:'SLA Cumplimiento %',data:[96,91,88,82,79,65],borderColor:C.cyan,backgroundColor:ra(C.cyan,.04),pointBackgroundColor:C.cyan,pointRadius:4,borderDash:[3,2]},
+    ]},{plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:9,padding:10}}},
+      scales:{r:{angleLines:{color:'rgba(255,255,255,.07)'},grid:{color:'rgba(255,255,255,.06)'},pointLabels:{color:C.white,font:{size:10}},ticks:{display:false},min:0,max:100}}});
+
+    // Horizontal bar ordered desc
+    mk('maturityChart','bar',{labels:['TI','Ventas','Marketing','Soporte','RRHH','Operaciones','Legal'],
+      datasets:[{label:'Madurez Digital (0–5)',data:[4.4,4.1,3.8,3.4,3.0,2.9,2.2],
+        backgroundColor:[ra(C.teal,.82),ra(C.green,.75),ra(C.cyan,.72),ra(C.cyan,.64),ra(C.amber,.65),ra(C.amber,.57),ra(C.red,.65)],borderRadius:5}]
+    },{indexAxis:'y',...noL,scales:{x:{...gx,max:5,beginAtZero:true},y:{grid:{display:false}}}});
+
+    // Grouped bars same unit (días) — no double axis
+    mk('responseChart','bar',{labels:['Ventas','TI','Marketing','Soporte','Operaciones','Legal'],datasets:[
+      {label:'Días actual',data:[1.8,2.1,3.4,4.2,5.8,34.0],backgroundColor:[ra(C.teal,.72),ra(C.green,.72),ra(C.green,.62),ra(C.amber,.68),ra(C.amber,.65),ra(C.red,.78)],borderRadius:5},
+      {label:'Objetivo días',data:[2.0,2.0,3.0,3.0,4.0,10.0],backgroundColor:ra(C.white,.12),borderColor:ra(C.white,.42),borderWidth:1.5,borderRadius:5}
+    ]},{scales:{x:{grid:{display:false}},y:{...gy,beginAtZero:true,title:{display:true,text:'Días',color:C.muted}}},
+      plugins:{legend:{position:'top',labels:{color:C.muted,boxWidth:9,padding:9}},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw} d`}}}});
+  },
+
+  // ── S7 ──
+  6:()=>{
+    mk('riskMatrix','scatter',{datasets:[
+      {label:'Resistencia Nathan',data:[{x:8.2,y:8.5}],backgroundColor:ra(C.red,.88),pointRadius:16},
+      {label:'Errores Regulatorios',data:[{x:6.4,y:8.8}],backgroundColor:ra(C.red,.78),pointRadius:14},
+      {label:'Baja Adopción',data:[{x:6.8,y:8.1}],backgroundColor:ra(C.red,.72),pointRadius:13},
+      {label:'Fragmentación Silos',data:[{x:5.5,y:6.2}],backgroundColor:ra(C.amber,.78),pointRadius:12},
+      {label:'Complejidad Producto',data:[{x:5.2,y:5.8}],backgroundColor:ra(C.amber,.68),pointRadius:11},
+      {label:'Calidad Datos',data:[{x:3.8,y:7.4}],backgroundColor:ra(C.amber,.62),pointRadius:11},
+      {label:'ROI LP',data:[{x:2.9,y:8.2}],backgroundColor:ra(C.cyan,.62),pointRadius:10},
+    ]},{plugins:{legend:{position:'bottom',labels:{color:C.muted,boxWidth:8,padding:9,font:{size:9}}}},
+      scales:{x:{title:{display:true,text:'Probabilidad →',color:C.muted},min:0,max:10,...gx,beginAtZero:true},y:{title:{display:true,text:'Impacto →',color:C.muted},min:0,max:10,...gy}}});
+
+    // Horizontal bar ordered desc
+    mk('riskBar','bar',{labels:['Resistencia Nathan','Errores Regulat.','Baja Adopción','Fragm. Silos','Complejidad Prod.','Calidad Datos','ROI Insuficiente'],
+      datasets:[{label:'Severidad Combinada (1–10)',data:[8.8,8.6,8.2,6.8,6.1,5.8,5.1],
+        backgroundColor:[ra(C.red,.82),ra(C.red,.76),ra(C.red,.7),ra(C.amber,.76),ra(C.amber,.66),ra(C.amber,.59),ra(C.cyan,.6)],borderRadius:5}]
+    },{indexAxis:'y',...noL,scales:{x:{...gx,max:10,beginAtZero:true,title:{display:true,text:'Severidad (1–10)',color:C.muted}},y:{grid:{display:false}}}});
+  }
+};
+
+document.addEventListener('DOMContentLoaded',()=>{done[0]=true;charts[0]();});
+</script>
+</body>
+</html>
