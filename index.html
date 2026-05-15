@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Portafolio de María Jesús Quirós Castro — Business Intelligence, gobernanza de datos, dashboards ejecutivos e IA aplicada. Del dato disperso al criterio ejecutivo.">
+  <meta property="og:title" content="María Jesús Quirós Castro | BI Portfolio">
+  <meta property="og:description" content="Del dato disperso al criterio ejecutivo.">
+  <meta property="og:type" content="website">
+  <title>María Jesús Quirós Castro | Business Intelligence Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230A1A2E'/%3E%3Cpolygon points='16,4 19.5,12.5 28.5,13.2 22,19.2 24,28 16,23.5 8,28 10,19.2 3.5,13.2 12.5,12.5' fill='%23C8963E' stroke='%23E8B96A' stroke-width='0.8'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <!-- Particle canvas (hero background) -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Progress bar -->
+  <div class="progress-bar" id="progressBar" aria-hidden="true"></div>
+
+  <!-- Skip link -->
+  <a class="skip-link" href="#main">Saltar al contenido principal</a>
+
+  <!-- ── NAVBAR ── -->
+  <header class="navbar" id="navbar">
+    <a class="brand" href="#top" aria-label="Inicio — María Jesús Quirós Castro">
+      <span class="brand-mark" aria-hidden="true">MJ</span>
+      <span class="brand-name">María Jesús Quirós Castro</span>
+    </a>
+    <nav aria-label="Navegación principal">
+      <a href="#command">Command Center</a>
+      <a href="#metodologia">Método</a>
+      <a href="#dashboards">Dashboards</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <a class="btn btn-nav" href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards" target="_blank" rel="noopener noreferrer" aria-label="Ver repositorio en GitHub">
+      <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.185 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.013-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.112-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.944.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.579.688.481C19.138 20.203 22 16.447 22 12.021 22 6.484 17.522 2 12 2z"/></svg>
+      Ver Repositorio
+    </a>
+  </header>
+
+  <main id="main">
+
+    <!-- ══════════════════════════════════════════
+         01 · HERO
+    ══════════════════════════════════════════ -->
+    <section class="hero" id="top" aria-label="Presentación">
+      <div class="hero-glow glow-a" aria-hidden="true"></div>
+      <div class="hero-glow glow-b" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <p class="eyebrow reveal" data-delay="0">ESPECIALIZACIÓN BI · 2026</p>
+        <h1 class="reveal" data-delay="100">
+          <span class="name-line">María Jesús</span>
+          <span class="name-line">Quirós Castro</span>
+        </h1>
+        <p class="hero-role reveal" data-delay="200">
+          Business Intelligence.<br>
+          Gobernanza de datos.<br>
+          Decisiones que escalan.
+        </p>
+        <p class="hero-position reveal" data-delay="300">
+          <em>"Del dato disperso al criterio ejecutivo."</em>
+        </p>
+        <div class="tag-row reveal" data-delay="400">
+          <span class="tag">Gobernanza</span>
+          <span class="tag">Visualización</span>
+          <span class="tag">IA Aplicada</span>
+          <span class="tag">Estrategia BI</span>
+        </div>
+        <div class="hero-ctas reveal" data-delay="500">
+          <a class="btn btn-primary" href="#dashboards">Explorar dashboards</a>
+          <a class="btn btn-ghost" href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards" target="_blank" rel="noopener noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            Ver repositorio
+          </a>
+        </div>
+      </div>
+
+      <!-- Command Center Card (hero visual) -->
+      <aside class="hero-visual reveal" id="heroCard" data-delay="200" aria-label="Panel Command Center BI">
+        <div class="cc-card">
+          <div class="cc-header">
+            <span class="cc-live">
+              <span class="live-dot" aria-hidden="true"></span>
+              <span class="cc-live-label">COMMAND CENTER BI</span>
+            </span>
+            <span class="cc-mode-label" id="ccModeLabel">ESTRATEGIA</span>
+          </div>
+
+          <div class="cc-tabs" role="tablist" aria-label="Vistas del panel">
+            <button class="cc-tab active" role="tab" aria-selected="true" data-mode="ESTRATEGIA">Estrategia</button>
+            <button class="cc-tab" role="tab" aria-selected="false" data-mode="GOBERNANZA">Gobernanza</button>
+            <button class="cc-tab" role="tab" aria-selected="false" data-mode="DASHBOARDS">Dashboards</button>
+          </div>
+
+          <div class="cc-kpis" aria-label="Indicadores clave">
+            <div class="cc-kpi">
+              <span class="cc-kpi-label">Dashboards</span>
+              <strong class="cc-kpi-value" data-counter="2">0</strong>
+              <small class="cc-kpi-desc">productos de datos</small>
+            </div>
+            <div class="cc-kpi">
+              <span class="cc-kpi-label">Pivotes</span>
+              <strong class="cc-kpi-value" data-counter="6">0</strong>
+              <small class="cc-kpi-desc">capas estratégicas</small>
+            </div>
+            <div class="cc-kpi gold">
+              <span class="cc-kpi-label">Madurez BI</span>
+              <strong class="cc-kpi-value"><span data-counter="87">0</span>%</strong>
+              <small class="cc-kpi-desc">nivel alcanzado</small>
+            </div>
+          </div>
+
+          <div class="cc-chart-area" aria-hidden="true">
+            <div class="cc-chart-header">LECTURA EJECUTIVA</div>
+            <div class="cc-chart-inner">
+              <div class="cc-bars">
+                <div class="cc-bar" style="--h:55%"></div>
+                <div class="cc-bar" style="--h:82%"></div>
+                <div class="cc-bar" style="--h:67%"></div>
+                <div class="cc-bar cc-bar--gold" style="--h:94%"></div>
+                <div class="cc-bar" style="--h:73%"></div>
+              </div>
+              <div class="cc-chart-text">
+                <strong>Alineamiento dinámico</strong>
+                <p>Prioriza acciones con impacto estratégico y trazabilidad.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cc-process" aria-label="Proceso: Datos, Gobierno, Insight, Decisión">
+            <span class="cc-proc active">Datos</span>
+            <span class="cc-arrow" aria-hidden="true">→</span>
+            <span class="cc-proc">Gobierno</span>
+            <span class="cc-arrow" aria-hidden="true">→</span>
+            <span class="cc-proc">Insight</span>
+            <span class="cc-arrow" aria-hidden="true">→</span>
+            <span class="cc-proc">Decisión</span>
+          </div>
+        </div>
+      </aside>
+
+      <div class="scroll-cue" id="scrollCue" aria-hidden="true">
+        <div class="scroll-line"></div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         02 · COMMAND CENTER (STICKY)
+    ══════════════════════════════════════════ -->
+    <section class="section section--alt" id="command" aria-labelledby="command-title">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <p class="eyebrow">Indicadores clave</p>
+          <h2 id="command-title">El panel que muestra<br>la profundidad del trabajo</h2>
+        </div>
+
+        <div class="command-wrapper">
+          <!-- Sticky left panel -->
+          <div class="command-sticky">
+            <div class="sp-card">
+              <div class="sp-live">
+                <span class="live-dot" aria-hidden="true"></span>COMMAND CENTER
+              </div>
+              <h3 class="sp-name">María Jesús<br>Quirós Castro</h3>
+              <p class="sp-role">Analista BI · Estrategia de Datos</p>
+              <div class="sp-avail">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>Disponible para proyectos</span>
+              </div>
+              <ul class="sp-areas" aria-label="Áreas de especialización">
+                <li><span class="sp-bullet" aria-hidden="true">›</span>Gobernanza de datos</li>
+                <li><span class="sp-bullet" aria-hidden="true">›</span>Visualización ejecutiva</li>
+                <li><span class="sp-bullet" aria-hidden="true">›</span>IA aplicada a negocios</li>
+                <li><span class="sp-bullet" aria-hidden="true">›</span>Estrategia de madurez BI</li>
+              </ul>
+              <a class="btn btn-ghost btn-sm" href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards" target="_blank" rel="noopener noreferrer">Ver repositorio ↗</a>
+            </div>
+          </div>
+
+          <!-- Scrolling KPI blocks -->
+          <div class="command-metrics">
+
+            <div class="kpi-block reveal">
+              <div class="kpi-top">
+                <span class="kpi-label">MADUREZ BI</span>
+                <span class="kpi-num gold" data-counter="87">0</span><span class="kpi-unit gold">%</span>
+              </div>
+              <div class="kpi-track" role="progressbar" aria-valuenow="87" aria-valuemin="0" aria-valuemax="100" aria-label="Madurez BI: 87%">
+                <div class="kpi-fill" data-fill="87"></div>
+              </div>
+              <p class="kpi-desc">Nivel 4 en framework de madurez digital. Trazabilidad completa, datos confiables y gobernanza documentada en producción.</p>
+            </div>
+
+            <div class="kpi-block reveal">
+              <div class="kpi-top">
+                <span class="kpi-label">DASHBOARDS ACTIVOS</span>
+                <span class="kpi-num" data-counter="2">0</span>
+              </div>
+              <div class="kpi-track" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" aria-label="Avance: 40%">
+                <div class="kpi-fill" data-fill="40"></div>
+              </div>
+              <p class="kpi-desc">Dashboards ejecutivos con actualizaciones semanales, filtros interactivos y lectura orientada a decisiones de negocio.</p>
+            </div>
+
+            <div class="kpi-block reveal">
+              <div class="kpi-top">
+                <span class="kpi-label">PIVOTES DE ANÁLISIS</span>
+                <span class="kpi-num" data-counter="6">0</span>
+              </div>
+              <div class="kpi-track" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Avance: 60%">
+                <div class="kpi-fill" data-fill="60"></div>
+              </div>
+              <p class="kpi-desc">Casos de análisis donde los datos cambiaron una decisión estratégica. Cada pivote tiene contexto, método y resultado de negocio.</p>
+            </div>
+
+            <div class="kpi-block reveal">
+              <div class="kpi-top">
+                <span class="kpi-label">COMPETENCIAS CLAVE</span>
+                <span class="kpi-num" data-counter="9">0</span>
+              </div>
+              <div class="kpi-track" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" aria-label="Avance: 90%">
+                <div class="kpi-fill" data-fill="90"></div>
+              </div>
+              <p class="kpi-desc">Desde análisis de datos y visualización hasta gobernanza, storytelling con datos e inteligencia artificial aplicada al negocio.</p>
+            </div>
+
+            <div class="kpi-block reveal">
+              <div class="kpi-top">
+                <span class="kpi-label">HERRAMIENTAS Y ENFOQUES</span>
+                <span class="kpi-num" data-counter="5">0</span>
+              </div>
+              <div class="kpi-track" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Avance: 50%">
+                <div class="kpi-fill" data-fill="50"></div>
+              </div>
+              <p class="kpi-desc">Power BI, Python, Chart.js, Plotly, HTML ejecutivo. Tecnología al servicio del criterio, no del catálogo de herramientas.</p>
+            </div>
+
+          </div><!-- /command-metrics -->
+        </div><!-- /command-wrapper -->
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         03 · MÉTODO
+    ══════════════════════════════════════════ -->
+    <section class="section" id="metodologia" aria-labelledby="method-title">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <p class="eyebrow">Proceso</p>
+          <h2 id="method-title">Del dato disperso<br>a la decisión clara</h2>
+          <p class="section-lead">No hay dashboards útiles sin un proceso riguroso detrás. Así se construye criterio de negocio con datos.</p>
+        </div>
+
+        <div class="method-grid">
+          <div class="method-step reveal" data-delay="0">
+            <span class="method-num" aria-hidden="true">01</span>
+            <div class="method-body">
+              <h3>Datos</h3>
+              <p>Las fuentes llegan rotas. Formatos distintos, contextos distintos, sin criterio de calidad. El primer trabajo es conocer el terreno real, no el ideal.</p>
+              <div class="tag-row">
+                <span class="tag">SQL</span>
+                <span class="tag">Python</span>
+                <span class="tag">ETL</span>
+                <span class="tag">APIs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="method-step reveal" data-delay="120">
+            <span class="method-num" aria-hidden="true">02</span>
+            <div class="method-body">
+              <h3>Gobierno</h3>
+              <p>Antes de visualizar, hay que confiar. Glosario de datos, linaje, reglas de calidad. La gobernanza no es burocracia — es la base que hace que los dashboards no mientan.</p>
+              <div class="tag-row">
+                <span class="tag">Gobernanza</span>
+                <span class="tag">Calidad</span>
+                <span class="tag">Linaje</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="method-step reveal" data-delay="240">
+            <span class="method-num" aria-hidden="true">03</span>
+            <div class="method-body">
+              <h3>Insight</h3>
+              <p>El análisis no es hacer gráficos. Es encontrar la pregunta ejecutiva correcta y responderla con evidencia que pueda sostenerse en una reunión de directivos.</p>
+              <div class="tag-row">
+                <span class="tag">Power BI</span>
+                <span class="tag">DAX</span>
+                <span class="tag">Estadística</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="method-step reveal" data-delay="360">
+            <span class="method-num" aria-hidden="true">04</span>
+            <div class="method-body">
+              <h3>Decisión</h3>
+              <p>El entregable no es un dashboard. Es la reunión donde alguien dice "esto cambia lo que vamos a hacer". Ese es el KPI real del Business Intelligence.</p>
+              <div class="tag-row">
+                <span class="tag">Estrategia</span>
+                <span class="tag">OKR</span>
+                <span class="tag">Impacto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         04 · DASHBOARDS
+    ══════════════════════════════════════════ -->
+    <section class="section section--alt" id="dashboards" aria-labelledby="dash-title">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <p class="eyebrow">Trabajo real</p>
+          <h2 id="dash-title">Dashboards que<br>informan decisiones</h2>
+          <p class="section-lead">Cada visualización tiene un antes y un después de negocio. No son pantallas bonitas — son instrumentos de criterio ejecutivo.</p>
+        </div>
+
+        <div class="dash-grid">
+
+          <article class="dash-card reveal" data-delay="0">
+            <div class="dash-preview huawei" aria-hidden="true">
+              <div class="dp-label">ALINEAMIENTO DINÁMICO</div>
+              <div class="dp-bars">
+                <div class="dp-bar" style="--h:55%"></div>
+                <div class="dp-bar" style="--h:82%"></div>
+                <div class="dp-bar" style="--h:67%"></div>
+                <div class="dp-bar dp-bar--gold" style="--h:94%"></div>
+              </div>
+              <div class="dp-metrics">
+                <div class="dp-metric"><span>Sensing</span><strong>↑ 84%</strong></div>
+                <div class="dp-metric"><span>Seizing</span><strong>↑ 91%</strong></div>
+                <div class="dp-metric"><span>Config.</span><strong>↑ 78%</strong></div>
+              </div>
+            </div>
+            <div class="dash-content">
+              <p class="dash-tag">Caso Huawei · HTML ejecutivo</p>
+              <h3>Alineamiento Dinámico</h3>
+              <p>Dashboard ejecutivo sobre el alineamiento dinámico como capacidad estratégica en entornos de alta presión competitiva.</p>
+              <ul class="dash-list">
+                <li>Command center estratégico con KPIs de sensing, seizing y configuring</li>
+                <li>Evolución temporal, madurez digital, colaboración y descentralización</li>
+                <li>Riesgo geopolítico, tabla OKR, alertas y acciones prioritarias</li>
+              </ul>
+              <div class="tag-row">
+                <span class="tag">HTML</span>
+                <span class="tag">Chart.js</span>
+                <span class="tag">OKR</span>
+                <span class="tag">BI</span>
+              </div>
+              <a class="btn btn-ghost" href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards/tree/main/Alineamiento%20Din%C3%A1mico" target="_blank" rel="noopener noreferrer">Ver dashboard ↗</a>
+            </div>
+          </article>
+
+          <article class="dash-card reveal" data-delay="150">
+            <div class="dash-preview culture" aria-hidden="true">
+              <div class="dp-label">CULTURA Y LIDERAZGO DIGITAL</div>
+              <div class="dp-filters">
+                <span></span><span class="active"></span><span></span>
+              </div>
+              <div class="dp-heatmap">
+                <div></div><div></div><div></div><div></div>
+                <div class="hot"></div><div></div><div></div><div></div>
+                <div></div><div class="warm"></div><div></div><div></div>
+              </div>
+              <div class="dp-metrics">
+                <div class="dp-metric"><span>Cultura</span><strong>↑ 76%</strong></div>
+                <div class="dp-metric"><span>Gobern.</span><strong>↑ 88%</strong></div>
+                <div class="dp-metric"><span>Moderniz.</span><strong>↑ 82%</strong></div>
+              </div>
+            </div>
+            <div class="dash-content">
+              <p class="dash-tag">Caso FCC · Gobernanza digital</p>
+              <h3>Cultura y Liderazgo Digital</h3>
+              <p>Dashboard interactivo sobre cultura, liderazgo digital y gobernanza para la modernización tecnológica institucional.</p>
+              <ul class="dash-list">
+                <li>Filtros por periodo, bureau/oficina e iniciativa</li>
+                <li>KPIs de cultura digital, liderazgo, modernización, colaboración y confianza</li>
+                <li>Tendencias temporales, heatmap, capacidades dinámicas y matriz OKR</li>
+              </ul>
+              <div class="tag-row">
+                <span class="tag">HTML</span>
+                <span class="tag">Plotly</span>
+                <span class="tag">Filtros</span>
+                <span class="tag">Gobernanza</span>
+              </div>
+              <a class="btn btn-ghost" href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards/tree/main/Cultura%20y%20Liderazgo%20Digital" target="_blank" rel="noopener noreferrer">Ver dashboard ↗</a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         05 · PIVOTES
+    ══════════════════════════════════════════ -->
+    <section class="section" id="pivotes" aria-labelledby="pivotes-title">
+      <div class="section-inner">
+        <div class="section-header centered reveal">
+          <p class="eyebrow">Seis pivotes estratégicos</p>
+          <h2 id="pivotes-title">Cuando los datos<br>cambian lo que decides</h2>
+          <p class="section-lead">La narrativa conecta estrategia digital con evidencia operativa. Seis capas de análisis donde la información dejó de ser pasiva.</p>
+        </div>
+
+        <div class="pivotes-grid">
+
+          <article class="pivot-card reveal" data-delay="0">
+            <span class="pivot-num" aria-hidden="true">01</span>
+            <div class="pivot-body">
+              <h3>Alineamiento dinámico</h3>
+              <p>Conecta estrategia, recursos, tecnología y ejecución para responder a cambios del entorno.</p>
+              <dl class="pivot-dl">
+                <dt>Evidencia</dt>
+                <dd>Command center estratégico, OKR, alertas y lectura de capacidades dinámicas.</dd>
+                <dt>Valor</dt>
+                <dd>Reduce dispersión estratégica y prioriza acciones con impacto ejecutivo.</dd>
+              </dl>
+            </div>
+          </article>
+
+          <article class="pivot-card reveal" data-delay="80">
+            <span class="pivot-num" aria-hidden="true">02</span>
+            <div class="pivot-body">
+              <h3>Cultura y liderazgo digital</h3>
+              <p>Habilita modernización, adopción tecnológica y coordinación entre equipos.</p>
+              <dl class="pivot-dl">
+                <dt>Evidencia</dt>
+                <dd>KPIs de cultura, liderazgo, colaboración, confianza y capacidades dinámicas.</dd>
+                <dt>Valor</dt>
+                <dd>Acelera la adopción y fortalece la gobernanza del cambio.</dd>
+              </dl>
+            </div>
+          </article>
+
+          <article class="pivot-card reveal" data-delay="0">
+            <span class="pivot-num" aria-hidden="true">03</span>
+            <div class="pivot-body">
+              <h3>Innovación centrada en el cliente</h3>
+              <p>Transforma datos en experiencias, soluciones y decisiones orientadas al valor.</p>
+              <dl class="pivot-dl">
+                <dt>Evidencia</dt>
+                <dd>Lectura de necesidades, segmentación de iniciativas e insights accionables.</dd>
+                <dt>Valor</dt>
+                <dd>Convierte señales del mercado en mejoras de servicio y propuesta de valor.</dd>
+              </dl>
+            </div>
+          </article>
+
+          <article class="pivot-card reveal" data-delay="80">
+            <span class="pivot-num" aria-hidden="true">04</span>
+            <div class="pivot-body">
+              <h3>Agilidad operativa</h3>
+              <p>Acelera decisiones, procesos y adaptación mediante indicadores claros.</p>
+              <dl class="pivot-dl">
+                <dt>Evidencia</dt>
+                <dd>Tendencias temporales, comparaciones por unidad y acciones prioritarias.</dd>
+                <dt>Valor</dt>
+                <dd>Detecta bloqueos y responde con ciclos de mejora más cortos.</dd>
+              </dl>
+            </div>
+          </article>
+
+          <article class="pivot-card reveal" data-delay="0">
+            <span class="pivot-num" aria-hidden="true">05</span>
+            <div class="pivot-body">
+              <h3>Acceso y uso de datos</h3>
+              <p>Fortalece decisiones basadas en información confiable, disponible y trazable.</p>
+              <dl class="pivot-dl">
+                <dt>Evidencia</dt>
+                <dd>Dashboards, filtros, KPIs, heatmaps y visualizaciones para lectura ejecutiva.</dd>
+                <dt>Valor</dt>
+                <dd>Disminuye la incertidumbre y eleva la confianza en la decisión.</dd>
+              </dl>
+            </div>
+          </article>
+
+          <article class="pivot-card reveal" data-delay="80">
+            <span class="pivot-num" aria-hidden="true">06</span>
+            <div class="pivot-body">
+              <h3>Ecosistemas colaborativos</h3>
+              <p>Integra alianzas, capacidades externas y aprendizaje compartido.</p>
+              <dl class="pivot-dl">
+                <dt>Evidencia</dt>
+                <dd>Indicadores de colaboración, descentralización y coordinación institucional.</dd>
+                <dt>Valor</dt>
+                <dd>Amplía capacidades y sostiene innovación con redes de aprendizaje.</dd>
+              </dl>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         06 · GOBERNANZA & IA
+    ══════════════════════════════════════════ -->
+    <section class="section section--alt" id="gobernanza" aria-labelledby="gov-title">
+      <div class="section-inner">
+        <div class="section-header reveal">
+          <p class="eyebrow">Gobernanza e IA</p>
+          <h2 id="gov-title">Los datos no mienten<br>— si están bien gobernados</h2>
+          <p class="section-lead">La inteligencia de negocio sin gobernanza es decoración. Con gobernanza, es infraestructura que escala y genera confianza ejecutiva.</p>
+        </div>
+
+        <div class="gov-layout">
+
+          <!-- Maturity matrix -->
+          <div class="maturity-wrap reveal">
+            <h3 class="subsection-title">Matriz de Madurez BI</h3>
+            <div class="maturity-scroll">
+              <div class="maturity-matrix" role="table" aria-label="Nivel de madurez por dimensión BI">
+                <div class="matrix-head" role="row">
+                  <div role="columnheader" class="mh-dim"></div>
+                  <div role="columnheader">Inicial</div>
+                  <div role="columnheader">Gestionado</div>
+                  <div role="columnheader">Definido</div>
+                  <div role="columnheader">Medido</div>
+                  <div role="columnheader">Optimizado</div>
+                </div>
+                <div class="matrix-row" role="row">
+                  <div class="matrix-dim" role="rowheader">Calidad de datos</div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc" role="cell" aria-label="Pendiente"></div>
+                </div>
+                <div class="matrix-row" role="row">
+                  <div class="matrix-dim" role="rowheader">Linaje de datos</div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc partial" role="cell" aria-label="En progreso"></div>
+                  <div class="mc" role="cell" aria-label="Pendiente"></div>
+                </div>
+                <div class="matrix-row" role="row">
+                  <div class="matrix-dim" role="rowheader">Glosario de datos</div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc partial" role="cell" aria-label="En progreso"></div>
+                </div>
+                <div class="matrix-row" role="row">
+                  <div class="matrix-dim" role="rowheader">Seguridad y acceso</div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc partial" role="cell" aria-label="En progreso"></div>
+                  <div class="mc" role="cell" aria-label="Pendiente"></div>
+                  <div class="mc" role="cell" aria-label="Pendiente"></div>
+                </div>
+                <div class="matrix-row" role="row">
+                  <div class="matrix-dim" role="rowheader">IA / Automatización</div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc filled" role="cell" aria-label="Alcanzado"></div>
+                  <div class="mc partial" role="cell" aria-label="En progreso"></div>
+                  <div class="mc" role="cell" aria-label="Pendiente"></div>
+                </div>
+              </div>
+            </div>
+            <div class="matrix-legend" aria-label="Leyenda de la matriz">
+              <span><span class="leg-dot filled" aria-hidden="true"></span>Implementado</span>
+              <span><span class="leg-dot partial" aria-hidden="true"></span>En progreso</span>
+              <span><span class="leg-dot" aria-hidden="true"></span>Pendiente</span>
+            </div>
+          </div>
+
+          <!-- AI section -->
+          <div class="ai-wrap reveal" data-delay="150">
+            <h3 class="subsection-title">IA Aplicada — No Experimental</h3>
+            <p class="ai-intro">No IA por IA. Automatización donde el proceso manual costaba más que el error.</p>
+            <ul class="ai-list">
+              <li>
+                <span class="ai-diamond" aria-hidden="true">◆</span>
+                <div>
+                  <strong>Generación automática de narrativas ejecutivas</strong>
+                  <p>Resúmenes de datos convertidos en textos de lectura rápida para decisores sin tiempo.</p>
+                </div>
+              </li>
+              <li>
+                <span class="ai-diamond" aria-hidden="true">◆</span>
+                <div>
+                  <strong>Clasificación de señales de alerta</strong>
+                  <p>Detección de patrones anómalos en datos operacionales para acciones preventivas.</p>
+                </div>
+              </li>
+              <li>
+                <span class="ai-diamond" aria-hidden="true">◆</span>
+                <div>
+                  <strong>Automatización de reportes periódicos</strong>
+                  <p>Pipelines que convierten la actualización manual en un proceso confiable y reproducible.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════════════════
+         07 · CONTACTO
+    ══════════════════════════════════════════ -->
+    <section class="section contact-section" id="contacto" aria-label="Contacto">
+      <div class="contact-watermark" aria-hidden="true">
+        <span>CONVERSEMOS &nbsp;&nbsp;·&nbsp;&nbsp; CONVERSEMOS &nbsp;&nbsp;·&nbsp;&nbsp; CONVERSEMOS &nbsp;&nbsp;·&nbsp;&nbsp; CONVERSEMOS &nbsp;&nbsp;·&nbsp;&nbsp;</span>
+      </div>
+      <div class="section-inner contact-inner reveal">
+        <p class="eyebrow">El siguiente paso</p>
+        <h2>¿Tienes datos que<br>necesitan dirección?</h2>
+        <p class="contact-lead">Trabajo con equipos que quieren convertir su información en ventaja competitiva. Si tienes datos dispersos y necesitas criterio ejecutivo, hablemos.</p>
+        <div class="contact-ctas">
+          <a class="btn btn-primary btn-lg" href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards" target="_blank" rel="noopener noreferrer">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+            Ver repositorio
+          </a>
+        </div>
+        <div class="contact-links">
+          <a href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards/tree/main/Alineamiento%20Din%C3%A1mico" target="_blank" rel="noopener noreferrer">Dashboard Alineamiento Dinámico ↗</a>
+          <span class="contact-sep" aria-hidden="true">·</span>
+          <a href="https://github.com/MaryJ0801/Digital-Business-Intelligence-gobernanza-practica-con-herramientas-y-dashboards/tree/main/Cultura%20y%20Liderazgo%20Digital" target="_blank" rel="noopener noreferrer">Dashboard Cultura Digital ↗</a>
+        </div>
+        <p class="contact-sig">
+          <span class="sig-code">MJQ</span> · Costa Rica · 2026
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
