@@ -912,6 +912,10 @@ nav a:hover {
   background: linear-gradient(145deg, rgba(56,189,248,0.12), rgba(10,26,46,0.6));
   border-right: 1px solid var(--border-glass);
 }
+.dash-preview.coex {
+  background: linear-gradient(145deg, rgba(20,184,166,0.14), rgba(200,150,62,0.08), rgba(10,26,46,0.6));
+  border-right: 1px solid var(--border-glass);
+}
 
 .dp-label {
   font-family: var(--font-data);
@@ -950,6 +954,23 @@ nav a:hover {
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(56,189,248,0.72), rgba(20,184,166,0.36));
   border: 1px solid rgba(56,189,248,0.24);
+}
+.dp-app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  flex: 1;
+  align-content: center;
+}
+.dp-app-grid span {
+  aspect-ratio: 1;
+  border-radius: 6px;
+  background: rgba(20,184,166,0.12);
+  border: 1px solid var(--border-glass);
+}
+.dp-app-grid span.active {
+  background: linear-gradient(145deg, rgba(20,184,166,0.45), rgba(200,150,62,0.28));
+  border-color: rgba(20,184,166,0.46);
 }
 .dp-filters {
   display: grid;
