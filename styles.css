@@ -1063,6 +1063,12 @@ nav a:hover {
 }
 .dash-list li::marker { color: var(--teal); }
 .dash-content .btn { margin-top: 24px; align-self: flex-start; }
+.dash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.dash-actions .btn { margin-top: 24px; }
 
 /* ═══════════════════════════════════════════════════════════════
    PIVOTES SECTION
